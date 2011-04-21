@@ -31,7 +31,7 @@
 
 $plugin_info = array(
 	'pi_name'			=> 'Easy iCalendar',
-	'pi_version'		=> '1.0',
+	'pi_version'		=> '1.1',
 	'pi_author'			=> 'Crescendo Multimedia',
 	'pi_author_url'		=> 'http://www.crescendo.net.nz/',
 	'pi_description'	=> 'Create valid iCalendars in seconds',
@@ -59,7 +59,7 @@ class Easy_ical
 			$out .= "X-WR-CALNAME:".$this->escape($this->EE->TMPL->fetch_param('calname'))."\r\n";
 		}
 		
-		$out .= "PRODID:-//EE Easy iCalendar plugin//NONSGML v1.0//EN\r\n";
+		$out .= "PRODID:-//EE Easy iCalendar plugin//NONSGML v1.1//EN\r\n";
 		
 		// EE has probably put heaps of useless whitespace between each entry
 		$tagdata = trim($this->EE->TMPL->tagdata);
@@ -70,7 +70,14 @@ class Easy_ical
 		
 		// print output directly with the correct content-type
 		$content_type = $this->EE->TMPL->fetch_param('content_type');
-		if (empty($content_type)) $content_type = 'text/calendar; charset=UTF-8';
+		if (empty($content_type)){
+			$content_type = 'text/calendar; charset=UTF-8';
+		}
+		else if($content_type=='debug')
+		{
+			$content_type = 'text/html; charset=UTF-8';
+			$out ="<pre>".$out;
+		}
 		
 		header('Content-Type: '.$content_type);
 		exit($out);
@@ -97,6 +104,18 @@ class Easy_ical
 		if ($this->EE->TMPL->fetch_param('summary') !== FALSE)
 		{
 			$out .= "SUMMARY:".$this->escape($this->EE->TMPL->fetch_param('summary'))."\r\n";
+		}
+		
+		if ($this->EE->TMPL->fetch_param('update') !== FALSE)
+		{
+			if($this->EE->TMPL->fetch_param('update') !=='')
+			{
+				$out .= "SEQUENCE:".$this->escape($this->EE->TMPL->fetch_param('update'))."\r\n";
+			}
+		}
+		if ($this->EE->TMPL->fetch_param('url') !== FALSE)
+		{
+			$out .= "URL:".$this->escape($this->EE->TMPL->fetch_param('url'))."\r\n";
 		}
 		
 		$description = trim($this->EE->TMPL->tagdata);
@@ -155,6 +174,26 @@ Really basic, just construct a template with a channel entries tag, like so:
 All of the CRLF and escaping characters nonsense will be handled for you automatically.
 
 NOTE: Anything else in the template outside the {exp:easy_ical:calendar} tag will be ignored!
+
+Optional tag parameters
+--------------------------
+content_type="debug"
+ This will output the template with a html/text header and pre-tag for debugging. Or specify your own content_type.
+ Example: {exp:easy_ical:calendar content_type="debug ... }
+
+
+Parameters for the event tag
+Example: {exp:easy_ical:event url="{url_title_path='group/template'}" update="{revision_num} ... }
+
+url="{url_title_path='group/template'}"
+ This allows you to add a link to a calendar event entry
+
+update={number}
+ This adds a SEQUENCE=(number) to the event. Needed if you update an entry, otherwise iCal won't update the event.
+ Use a simple counter custom field, like http://github.com/GDmac/Reevision.ee_addon
+  
+--------------------------
+ 
 EOF;
 	}
 }
