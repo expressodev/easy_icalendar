@@ -1,6 +1,7 @@
-# Easy iCalendar
+Easy iCalendar
+================
 
-Create valid iCalendars in seconds  
+Create valid iCalendars in seconds
 Usage: Really basic, just construct a template with a channel entries tag, like so:
 
 	{exp:easy_ical:calendar timezone="Pacific/Auckland" name="My Easy Event Calendar"}
@@ -13,21 +14,62 @@ Usage: Really basic, just construct a template with a channel entries tag, like 
 
 All of the CRLF and escaping characters nonsense will be handled for you automatically.
 
-*NOTE: Anything else in the template outside the {exp:easy_ical:calendar} tag will be ignored!*
+**NOTE: Any code in your template outside of the {exp:easy_ical:calendar} tag will be ignored!**
 
-## Optional tag parameters
+{exp:easy_ical:calendar} Tag Parameters
+---------------------------------------
 
-### Parameters for the Calendar-tag
-**content_type="debug"**  
-This will output the template with a html/text header and pre-tag for debugging. Or specify your own content_type.  
-Example: {exp:easy_ical:calendar content_type="debug ... }
+### `timezone="Pacific/Auckland"`
 
-### Parameters for the Event-tag
-Example: {exp:easy_ical:event url="{url_title_path='group/template'}" update="{revision_num} ... }
+Specify the timezone for all dates
 
-**url="{url_title_path='group/template'}"**  
-This allows you to add a link to a calendar event entry
+### `name="My Calendar"`
 
-**update={number}**  
-This adds a SEQUENCE=(number) to the event. Needed if you update an entry, otherwise iCal won't update the event.  
-Use a simple counter custom field, like http://github.com/GDmac/Reevision.ee_addon
+Give your calendar a name
+
+### `content_type="text/plain"`
+
+Force the specified content type (for debugging). Defaults to `text/calendar; charset=UTF-8`
+
+{exp:easy_ical:event} Tag Parameters
+------------------------------------
+
+### `uid="{entry_id}"`
+
+A unique identifier for the event
+
+### `start_time="{entry_date}"`
+
+The event start time/date
+
+### `end_time="{expiration_date}"`
+
+The event end time/date
+
+### ` location="{event_location}"`
+
+The event location (text). You probably want to pull this from a custom channel field.
+
+### `summary="{title}"`
+
+The event summary (title). You probably want to pull this from a custom channel field.
+
+### `url="{url_title_path='group/template'}"`
+
+Allows you to add a link to the event.
+
+### `sequence="{event_sequence}"`
+
+This adds a simple sequence number to the event. This is needed if you update an entry, otherwise
+iCal won't update the event. Use a simple counter custom field, like [Reevision](http://github.com/GDmac/Reevision.ee_addon)
+
+Changelog
+---------
+
+**1.1** *(2011-05-05)*
+
+* Added url="" and sequence="" parameters (thanks to [GDmac](http://github.com/GDmac))
+
+**1.0** *(2010-11-24)*
+
+* Initial release
