@@ -19,46 +19,46 @@ All of the CRLF and escaping characters nonsense will be handled for you automat
 {exp:easy_ical:calendar} Tag Parameters
 ---------------------------------------
 
-### `timezone="Pacific/Auckland"`
+### timezone="Pacific/Auckland"
 
 Specify the timezone for all dates
 
-### `name="My Calendar"`
+### name="My Calendar"
 
 Give your calendar a name
 
-### `content_type="text/plain"`
+### content_type="text/plain"
 
 Force the specified content type (for debugging). Defaults to `text/calendar; charset=UTF-8`
 
 {exp:easy_ical:event} Tag Parameters
 ------------------------------------
 
-### `uid="{entry_id}"`
+### uid="{entry_id}"
 
 A unique identifier for the event
 
-### `start_time="{entry_date}"`
+### start_time="{entry_date}"
 
 The event start time/date
 
-### `end_time="{expiration_date}"`
+### end_time="{expiration_date}"
 
 The event end time/date
 
-### ` location="{event_location}"`
+### location="{event_location}"
 
 The event location (text). You probably want to pull this from a custom channel field.
 
-### `summary="{title}"`
+### summary="{title}"
 
 The event summary (title). You probably want to pull this from a custom channel field.
 
-### `url="{url_title_path='group/template'}"`
+### url="{url_title_path='group/template'}"
 
 Allows you to add a link to the event.
 
-### `sequence="{event_sequence}"`
+### sequence="{event_sequence}"
 
 This adds a simple sequence number to the event. This is needed if you update an entry, otherwise
 iCal won't update the event. Use a simple counter custom field, like [Reevision](http://github.com/GDmac/Reevision.ee_addon)
