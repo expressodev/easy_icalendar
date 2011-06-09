@@ -40,7 +40,7 @@ $plugin_info = array(
 
 class Easy_ical
 {
-	const PI_VERSION = '1.1';
+	const PI_VERSION = '1.1.1';
 
 	function Easy_ical()
 	{
@@ -50,6 +50,7 @@ class Easy_ical
 	function calendar()
 	{
 		$out = "BEGIN:VCALENDAR\r\nVERSION:2.0\r\n";
+		$out .= "PRODID:-//ExpressionEngine Easy iCalendar plugin//NONSGML v".self::PI_VERSION ."//EN\r\n";
 
 		if ($this->EE->TMPL->fetch_param('timezone') !== FALSE)
 		{
@@ -60,8 +61,6 @@ class Easy_ical
 		{
 			$out .= "X-WR-CALNAME:".$this->escape($this->EE->TMPL->fetch_param('calname'))."\r\n";
 		}
-
-		$out .= 'PRODID:-//ExpressionEngine Easy iCalendar plugin//NONSGML v'.self::PI_VERSION .'//EN\r\n';
 
 		// EE has probably put heaps of useless whitespace between each entry
 		$tagdata = trim($this->EE->TMPL->tagdata);

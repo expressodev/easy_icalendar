@@ -66,6 +66,10 @@ iCal won't update the event. Use a simple counter custom field, like [Reevision]
 Changelog
 ---------
 
+**1.1.1** *(2011-06-09)*
+
+* Adjusted the output slightly to fix compatibility issues with some versions of iCal
+
 **1.1** *(2011-05-05)*
 
 * Added url="" and sequence="" parameters (thanks to [GDmac](http://github.com/GDmac))
