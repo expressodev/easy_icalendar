@@ -1,19 +1,18 @@
-Easy iCalendar
-================
+Easy iCalendar ExpressionEngine Plugin
+======================================
 
 Create valid iCalendars in seconds.
-
-Installation
-------------
-
-To install Easy iCalendar, simply copy the entire `easy_ical` folder to
-`system/expressionengine/third_party` on your server. You will then be able to use these
-tags in your templates.
 
 Requirements
 ------------
 
 * ExpressionEngine 2.1.3+
+
+Installation
+------------
+
+To install Easy iCalendar, simply copy the entire `easy_ical` folder to
+`/system/expressionengine/third_party` on your server.
 
 Complete Example
 ----------------
@@ -26,7 +25,7 @@ Complete Example
         {/exp:channel:entries}
     {/exp:easy_ical:calendar}
     
-All of the CRLF and escaping characters nonsense will be handled for you automatically.
+All of the CRLF line endings and character escaping will be handled for you automatically.
 
 **NOTE: Any code in your template outside of the {exp:easy_ical:calendar} tag will be ignored!**
 
