@@ -1,23 +1,37 @@
 Easy iCalendar
 ================
 
-Create valid iCalendars in seconds
-Usage: Really basic, just construct a template with a channel entries tag, like so:
+Create valid iCalendars in seconds.
 
-	{exp:easy_ical:calendar timezone="Pacific/Auckland" name="My Easy Event Calendar"}
-		{exp:channel:entries channel="events" show_future_entries="yes" show_expired="yes" limit="20"}
-			{exp:easy_ical:event uid="{entry_id}" start_time="{entry_date}" end_time="{expiration_date}" location="{event_location}" summary="{title}"}
-				{event_description}
-			{/exp:easy_ical:event}
-		{/exp:channel:entries}
-	{/exp:easy_ical:calendar}
+Installation
+------------
 
+To install Easy iCalendar, simply copy the entire `easy_ical` folder to
+`system/expressionengine/third_party` on your server. You will then be able to use these
+tags in your templates.
+
+Requirements
+------------
+
+* ExpressionEngine 2.1.3+
+
+Complete Example
+----------------
+
+    {exp:easy_ical:calendar timezone="Pacific/Auckland" name="My Simple Event Calendar"}
+        {exp:channel:entries channel="events" show_future_entries="yes" show_expired="yes" limit="20"}
+            {exp:easy_ical:event uid="{entry_id}" start_time="{entry_date}" end_time="{expiration_date}" location="{event_location}" summary="{title}"}
+                {event_description}
+            {/exp:easy_ical:event}
+        {/exp:channel:entries}
+    {/exp:easy_ical:calendar}
+    
 All of the CRLF and escaping characters nonsense will be handled for you automatically.
 
 **NOTE: Any code in your template outside of the {exp:easy_ical:calendar} tag will be ignored!**
 
-{exp:easy_ical:calendar} Tag Parameters
----------------------------------------
+Calendar Tag Parameters
+-----------------------
 
 ### timezone="Pacific/Auckland"
 
@@ -31,8 +45,10 @@ Give your calendar a name
 
 Force the specified content type (for debugging). Defaults to `text/calendar; charset=UTF-8`
 
-{exp:easy_ical:event} Tag Parameters
-------------------------------------
+Event Tag Parameters
+--------------------
+
+Any text inside the event tag will be used as the event description.
 
 ### uid="{entry_id}"
 
