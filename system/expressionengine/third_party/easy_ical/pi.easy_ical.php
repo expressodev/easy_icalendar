@@ -40,7 +40,7 @@ $plugin_info = array(
 
 class Easy_ical
 {
-	const PI_VERSION = '1.1.1';
+	const PI_VERSION = '1.1.2';
 
 	function Easy_ical()
 	{
@@ -79,6 +79,19 @@ class Easy_ical
 
 	function event()
 	{
+		$start_stamp = (FALSE === $this->EE->TMPL->fetch_param('start_time_stamp')) ?
+							$this->ical_time($this->EE->TMPL->fetch_param('start_time')) :
+							$this->EE->TMPL->fetch_param('start_time_stamp');
+
+		$end_stamp = FALSE;
+
+		if(!$this->EE->TMPL->fetch_param('end_time_stamp') || !$this->EE->TMPL->fetch_param('end_time') ) {
+
+			$end_stamp = (FALSE === $this->EE->TMPL->fetch_param('end_time_stamp')) ?
+								$this->ical_time($this->EE->TMPL->fetch_param('end_time')) :
+								$this->EE->TMPL->fetch_param('end_time_stamp');
+		}
+
 		$out = "BEGIN:VEVENT\r\n".
 			"UID:".$this->escape($this->EE->TMPL->fetch_param('uid'))."\r\n";
 
@@ -87,12 +100,12 @@ class Easy_ical
 			$out .= "LOCATION:".$this->escape($this->EE->TMPL->fetch_param('location'))."\r\n";
 		}
 
-		$out .= "DTSTAMP:".$this->ical_time($this->EE->TMPL->fetch_param('start_time'))."\r\n";
-		$out .= "DTSTART:".$this->ical_time($this->EE->TMPL->fetch_param('start_time'))."\r\n";
+		$out .= "DTSTAMP:".$start_stamp."\r\n";
+		$out .= "DTSTART:".$start_stamp."\r\n";
 
-		if ($this->EE->TMPL->fetch_param('end_time') !== FALSE)
+		if ($end_stamp !== FALSE)
 		{
-			$out .= "DTEND:".$this->ical_time($this->EE->TMPL->fetch_param('end_time'))."\r\n";
+			$out .= "DTEND:".$end_stamp."\r\n";
 		}
 
 		if ($this->EE->TMPL->fetch_param('summary') !== FALSE)
