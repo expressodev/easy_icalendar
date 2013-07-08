@@ -30,131 +30,114 @@
  */
 
 $plugin_info = array(
-	'pi_name'			=> 'Easy iCalendar',
-	'pi_version'		=> Easy_ical::PI_VERSION,
-	'pi_author'			=> 'Crescendo Multimedia',
-	'pi_author_url'		=> 'http://crescendo.net.nz/',
-	'pi_description'	=> 'Create valid iCalendars in seconds',
-	'pi_usage'			=> Easy_ical::usage()
+    'pi_name'           => 'Easy iCalendar',
+    'pi_version'        => Easy_ical::VERSION,
+    'pi_author'         => 'Exp:resso',
+    'pi_author_url'     => 'http://exp-resso.com/',
+    'pi_description'    => 'Create valid iCalendars in seconds',
+    'pi_usage'          => Easy_ical::usage(),
 );
 
 class Easy_ical
 {
-	const PI_VERSION = '1.1.1';
+    const VERSION = '1.2';
 
-	function Easy_ical()
-	{
-		$this->EE =& get_instance();
-	}
+    public function calendar()
+    {
+        $out = "BEGIN:VCALENDAR\r\nVERSION:2.0\r\n";
+        $out .= "PRODID:-//ExpressionEngine Easy iCalendar plugin//NONSGML v".self::VERSION ."//EN\r\n";
 
-	function calendar()
-	{
-		$out = "BEGIN:VCALENDAR\r\nVERSION:2.0\r\n";
-		$out .= "PRODID:-//ExpressionEngine Easy iCalendar plugin//NONSGML v".self::PI_VERSION ."//EN\r\n";
+        if (ee()->TMPL->fetch_param('timezone') !== FALSE) {
+            $out .= "X-WR-TIMEZONE:".$this->escape(ee()->TMPL->fetch_param('timezone'))."\r\n";
+        }
 
-		if ($this->EE->TMPL->fetch_param('timezone') !== FALSE)
-		{
-			$out .= "X-WR-TIMEZONE:".$this->escape($this->EE->TMPL->fetch_param('timezone'))."\r\n";
-		}
+        if (ee()->TMPL->fetch_param('calname') !== FALSE) {
+            $out .= "X-WR-CALNAME:".$this->escape(ee()->TMPL->fetch_param('calname'))."\r\n";
+        }
 
-		if ($this->EE->TMPL->fetch_param('calname') !== FALSE)
-		{
-			$out .= "X-WR-CALNAME:".$this->escape($this->EE->TMPL->fetch_param('calname'))."\r\n";
-		}
+        // EE has probably put heaps of useless whitespace between each entry
+        $tagdata = trim(ee()->TMPL->tagdata);
+        $tagdata = preg_replace('/END\:VEVENT\s*BEGIN\:VEVENT/', "END:VEVENT\r\nBEGIN:VEVENT", $tagdata);
+        if (!empty($tagdata)) $out .= $tagdata."\r\n";
 
-		// EE has probably put heaps of useless whitespace between each entry
-		$tagdata = trim($this->EE->TMPL->tagdata);
-		$tagdata = preg_replace('/END\:VEVENT\s*BEGIN\:VEVENT/', "END:VEVENT\r\nBEGIN:VEVENT", $tagdata);
-		if (!empty($tagdata)) $out .= $tagdata."\r\n";
+        $out .= "END:VCALENDAR";
 
-		$out .= "END:VCALENDAR";
+        // print output directly with the correct content-type
+        $content_type = ee()->TMPL->fetch_param('content_type');
+        if (empty($content_type)) $content_type = 'text/calendar; charset=UTF-8';
 
-		// print output directly with the correct content-type
-		$content_type = $this->EE->TMPL->fetch_param('content_type');
-		if (empty($content_type)) $content_type = 'text/calendar; charset=UTF-8';
+        header('Content-Type: '.$content_type);
+        exit($out);
+    }
 
-		header('Content-Type: '.$content_type);
-		exit($out);
-	}
+    public function event()
+    {
+        $out = "BEGIN:VEVENT\r\n".
+            "UID:".$this->escape(ee()->TMPL->fetch_param('uid'))."\r\n";
 
-	function event()
-	{
-		$out = "BEGIN:VEVENT\r\n".
-			"UID:".$this->escape($this->EE->TMPL->fetch_param('uid'))."\r\n";
+        if (ee()->TMPL->fetch_param('location') !== FALSE) {
+            $out .= "LOCATION:".$this->escape(ee()->TMPL->fetch_param('location'))."\r\n";
+        }
 
-		if ($this->EE->TMPL->fetch_param('location') !== FALSE)
-		{
-			$out .= "LOCATION:".$this->escape($this->EE->TMPL->fetch_param('location'))."\r\n";
-		}
+        $out .= "DTSTAMP:".$this->ical_time(ee()->TMPL->fetch_param('start_time'))."\r\n";
+        $out .= "DTSTART:".$this->ical_time(ee()->TMPL->fetch_param('start_time'))."\r\n";
 
-		$out .= "DTSTAMP:".$this->ical_time($this->EE->TMPL->fetch_param('start_time'))."\r\n";
-		$out .= "DTSTART:".$this->ical_time($this->EE->TMPL->fetch_param('start_time'))."\r\n";
+        if (ee()->TMPL->fetch_param('end_time') !== FALSE) {
+            $out .= "DTEND:".$this->ical_time(ee()->TMPL->fetch_param('end_time'))."\r\n";
+        }
 
-		if ($this->EE->TMPL->fetch_param('end_time') !== FALSE)
-		{
-			$out .= "DTEND:".$this->ical_time($this->EE->TMPL->fetch_param('end_time'))."\r\n";
-		}
+        if (ee()->TMPL->fetch_param('summary') !== FALSE) {
+            $out .= "SUMMARY:".$this->escape(ee()->TMPL->fetch_param('summary'))."\r\n";
+        }
 
-		if ($this->EE->TMPL->fetch_param('summary') !== FALSE)
-		{
-			$out .= "SUMMARY:".$this->escape($this->EE->TMPL->fetch_param('summary'))."\r\n";
-		}
+        if (ee()->TMPL->fetch_param('sequence') !== FALSE) {
+            $out .= "SEQUENCE:".$this->escape(ee()->TMPL->fetch_param('sequence'))."\r\n";
+        }
+        if (ee()->TMPL->fetch_param('url') !== FALSE) {
+            $out .= "URL:".$this->escape(ee()->TMPL->fetch_param('url'))."\r\n";
+        }
 
-		if ($this->EE->TMPL->fetch_param('sequence') !== FALSE)
-		{
-			$out .= "SEQUENCE:".$this->escape($this->EE->TMPL->fetch_param('sequence'))."\r\n";
-		}
-		if ($this->EE->TMPL->fetch_param('url') !== FALSE)
-		{
-			$out .= "URL:".$this->escape($this->EE->TMPL->fetch_param('url'))."\r\n";
-		}
+        $description = trim(ee()->TMPL->tagdata);
+        if (!empty($description)) {
+            $out .= "DESCRIPTION:".$this->escape($description)."\r\n";
+        }
 
-		$description = trim($this->EE->TMPL->tagdata);
-		if (!empty($description))
-		{
-			$out .= "DESCRIPTION:".$this->escape($description)."\r\n";
-		}
+        $out .= "END:VEVENT"."\r\n";
 
-		$out .= "END:VEVENT"."\r\n";
+        return $out;
+    }
 
-		return $out;
-	}
+    public function escape($str)
+    {
+        // strip any html tags
+        $str = preg_replace('/\<p\>/i', "\n\n", $str);
+        $str = preg_replace('/\<br\s*\/?\>/i', "\n", $str);
+        $str = strip_tags($str);
+        $str = trim(html_entity_decode($str, ENT_QUOTES, 'UTF-8'));
 
-	function escape($str)
-	{
-		// strip any html tags
-		$str = preg_replace('/\<p\>/i', "\n\n", $str);
-		$str = preg_replace('/\<br\s*\/?\>/i', "\n", $str);
-		$str = strip_tags($str);
-		$str = trim(html_entity_decode($str, ENT_QUOTES, 'UTF-8'));
+        // no more than two newlines please
+        $str = preg_replace("/(\r?\n){3,}/", "\n\n", $str);
 
-		// no more than two newlines please
-		$str = preg_replace("/(\r?\n){3,}/", "\n\n", $str);
+        // lines can't be more than 75 chars, use 60 to be safe
+        $lines = str_split($str, 60);
 
-		// lines can't be more than 75 chars, use 60 to be safe
-		$lines = str_split($str, 60);
+        foreach ($lines as $key => $line) {
+            // escape special icalendar chars and convert newlines to '\n'
+            $lines[$key] = str_replace(array('\\', ',', ';'), array('\\\\', '\,', '\;'), $lines[$key]);
+            $lines[$key] = preg_replace("/\r?\n/", '\n', $lines[$key]);
+        }
 
-		foreach ($lines as $key => $line)
-		{
-			// escape special icalendar chars and convert newlines to '\n'
-			$lines[$key] = str_replace(array('\\', ',', ';'), array('\\\\', '\,', '\;'), $lines[$key]);
-			$lines[$key] = preg_replace("/\r?\n/", '\n', $lines[$key]);
-		}
+        return implode("\r\n ", $lines);
+    }
 
-		return implode("\r\n ", $lines);
-	}
+    public function ical_time($time)
+    {
+        return ee()->localize->format_date('%Y%m%dT%H%i%s', $time);
+    }
 
-	function ical_time($time)
-	{
-		return $this->EE->localize->decode_date('%Y%m%dT%H%i%s', $time);
-	}
-
-	public static function usage()
-	{
-		// for performance only load README if inside control panel
-		$EE =& get_instance();
-		return isset($EE->cp) ? file_get_contents(PATH_THIRD.'easy_ical/README.md') : '';
-	}
+    public static function usage()
+    {
+        // for performance only load README if inside control panel
+        return REQ == 'CP' ? file_get_contents(PATH_THIRD.'easy_ical/README.md') : '';
+    }
 }
-
-/* End of file pi.easy_ical.php */

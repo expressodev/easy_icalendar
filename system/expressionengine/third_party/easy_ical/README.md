@@ -81,6 +81,10 @@ iCal won't update the event. Use a simple counter custom field, like [Reevision]
 Changelog
 ---------
 
+**1.2** *(2013-07-08)*
+
+* ExpressionEngine 2.6 compatibility
+
 **1.1.1** *(2011-06-09)*
 
 * Adjusted the output slightly to fix compatibility issues with some versions of iCal
