@@ -40,7 +40,7 @@ $plugin_info = array(
 
 class Easy_ical
 {
-    const VERSION = '1.2';
+    const VERSION = '1.2.1';
 
     public function calendar()
     {
@@ -75,15 +75,42 @@ class Easy_ical
         $out = "BEGIN:VEVENT\r\n".
             "UID:".$this->escape(ee()->TMPL->fetch_param('uid'))."\r\n";
 
+        $all_day  = FALSE;
+        $localize = TRUE;
+
+        if (ee()->TMPL->fetch_param('all_day') !== FALSE) {
+            if (
+                ee()->TMPL->fetch_param('all_day') === "y" OR 
+                ee()->TMPL->fetch_param('all_day') === "yes"
+            ) {
+                $all_day = TRUE;
+            }
+        }
+
+        if (ee()->TMPL->fetch_param('localize') !== FALSE) {
+            if (
+                ee()->TMPL->fetch_param('localize') === "n" OR 
+                ee()->TMPL->fetch_param('localize') === "no"
+            ) {
+                $localize = FALSE;
+            }
+        }
+
         if (ee()->TMPL->fetch_param('location') !== FALSE) {
             $out .= "LOCATION:".$this->escape(ee()->TMPL->fetch_param('location'))."\r\n";
         }
 
-        $out .= "DTSTAMP:".$this->ical_time(ee()->TMPL->fetch_param('start_time'))."\r\n";
-        $out .= "DTSTART:".$this->ical_time(ee()->TMPL->fetch_param('start_time'))."\r\n";
+        $out .= "DTSTAMP:".$this->ical_time(ee()->TMPL->fetch_param('start_time'), $all_day, $localize)."\r\n";
+        $out .= "DTSTART:".$this->ical_time(ee()->TMPL->fetch_param('start_time'), $all_day, $localize)."\r\n";
 
         if (ee()->TMPL->fetch_param('end_time') !== FALSE) {
-            $out .= "DTEND:".$this->ical_time(ee()->TMPL->fetch_param('end_time'))."\r\n";
+            $end_time = ee()->TMPL->fetch_param('end_time');
+
+            if ($all_day) {
+                $end_time = strtotime('+1 day', $end_time);
+            }
+
+            $out .= "DTEND:".$this->ical_time($end_time, $all_day, $localize)."\r\n";
         }
 
         if (ee()->TMPL->fetch_param('summary') !== FALSE) {
@@ -130,9 +157,32 @@ class Easy_ical
         return implode("\r\n ", $lines);
     }
 
-    public function ical_time($time)
+    public function ical_time($time, $all_day, $localize)
     {
-        return ee()->localize->format_date('%Y%m%dT%H%i%s', $time);
+        if ($localize) {
+            if (APP_VER >= '2.6.0')
+            {
+                if ($all_day) {
+                    return ee()->localize->format_date('%Y%m%d', $time);
+                } else {
+                    return ee()->localize->format_date('%Y%m%dT%H%i%s', $time);
+                }
+            }
+            else
+            {
+                if ($all_day) {
+                    return ee()->localize->decode_date('%Y%m%d', $time);
+                } else {
+                    return ee()->localize->decode_date('%Y%m%dT%H%i%s', $time);
+                }
+            }
+        } else {
+            if ($all_day) {
+                return date('Ymd', $time);
+            } else {
+                return date('Ymd\THis', $time);
+            }
+        }
     }
 
     public static function usage()

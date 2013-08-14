@@ -73,6 +73,14 @@ The event summary (title). You probably want to pull this from a custom channel 
 
 Allows you to add a link to the event.
 
+### localize="yes"
+
+Choose whether to run dates through EE's localization class. Set to "no" when using Low Events.
+
+### all_day="yes"
+
+Drop time information and treat as an all-day event. (Also useful with Low Events.)
+
 ### sequence="{event_sequence}"
 
 This adds a simple sequence number to the event. This is needed if you update an entry, otherwise
@@ -80,6 +88,11 @@ iCal won't update the event. Use a simple counter custom field, like [Reevision]
 
 Changelog
 ---------
+
+**1.2.1** *(2013-08-14)*
+
+* Re-added support for EE < 2.6.0
+* Added localize="" and all_day="" event parameters
 
 **1.2** *(2013-07-08)*
 
