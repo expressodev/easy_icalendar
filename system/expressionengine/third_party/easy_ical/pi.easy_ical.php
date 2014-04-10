@@ -160,21 +160,10 @@ class Easy_ical
     public function ical_time($time, $all_day, $localize)
     {
         if ($localize) {
-            if (APP_VER >= '2.6.0')
-            {
-                if ($all_day) {
-                    return ee()->localize->format_date('%Y%m%d', $time);
-                } else {
-                    return ee()->localize->format_date('%Y%m%dT%H%i%s', $time);
-                }
-            }
-            else
-            {
-                if ($all_day) {
-                    return ee()->localize->decode_date('%Y%m%d', $time);
-                } else {
-                    return ee()->localize->decode_date('%Y%m%dT%H%i%s', $time);
-                }
+            if ($all_day) {
+                return ee()->localize->format_date('%Y%m%d', $time);
+            } else {
+                return ee()->localize->format_date('%Y%m%dT%H%i%s', $time);
             }
         } else {
             if ($all_day) {
