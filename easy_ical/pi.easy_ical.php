@@ -91,9 +91,9 @@ class Easy_ical
         $start_time  = $this->ical_time(ee()->TMPL->fetch_param('start_time', ee()->localize->now));
         $end_time    = $this->ical_time(ee()->TMPL->fetch_param('end_time', $start_time+(60*60*24)));
         $summary     = $this->escape(ee()->TMPL->fetch_param('summary', 'An event happening in New York, NY'));
-        $location    = $this->escape(ee()->TMPL->fetch_param('location'), 'New York, NY');
+        $location    = $this->escape(ee()->TMPL->fetch_param('location', 'New York, NY'));
         $sequence    = $this->escape(ee()->TMPL->fetch_param('sequence', 1));
-        $url         = $this->escape(ee()->TMPL->fetch_param('url', '');
+        $url         = $this->escape(ee()->TMPL->fetch_param('url', ''));
         $description = $this->escape(trim(ee()->TMPL->tagdata));
 
         $this->return_data = "BEGIN:VEVENT\r\n" . 
