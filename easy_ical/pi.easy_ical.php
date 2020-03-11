@@ -54,7 +54,7 @@ class Easy_ical
         $content_type  = ee()->TMPL->fetch_param('content_type', 'text/calendar; charset=UTF-8');
         $filename      = $this->escape(ee()->TMPL->fetch_param('filename', 'save-the-date'));
 
-        // capture event tag adn trim away whitespace
+        // capture event tag and trim away whitespace
         $tagdata       = trim(ee()->TMPL->tagdata);
         $tagdata       = preg_replace('/END\:VEVENT\s*BEGIN\:VEVENT/', "END:VEVENT\r\nBEGIN:VEVENT", $tagdata);
 
