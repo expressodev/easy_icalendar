@@ -101,7 +101,6 @@ The event summary, typically `{title}` or a custom channel field (text)
 Allows you to add a link to the event.
 
 - **Type:** string
-- **Default:** `{site_url}{url_title}` via current install
 
 ##### `sequence` *(optional)*
 
