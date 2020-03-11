@@ -93,7 +93,7 @@ class Easy_ical
         $summary     = $this->escape(ee()->TMPL->fetch_param('summary', 'An event happening in New York, NY'));
         $location    = $this->escape(ee()->TMPL->fetch_param('location'), 'New York, NY');
         $sequence    = $this->escape(ee()->TMPL->fetch_param('sequence', 1));
-        $url         = $this->escape(ee()->TMPL->fetch_param('url', ''));
+        $url         = $this->escape(ee()->TMPL->fetch_param('url', '');
         $description = $this->escape(trim(ee()->TMPL->tagdata));
 
         $this->return_data = "BEGIN:VEVENT\r\n" . 

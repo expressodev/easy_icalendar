@@ -11,7 +11,6 @@ ExpressionEngine v2+
 *Compatible with EE v2-5*
 
 ## Installation
-
 - **EE v2:** Copy `easy_ical` directory into `/system/expressionengine/third_party/`
 - **EE v3:** Copy `easy_ical` directory into `/system/user/addons/`
 - **EE v4:** Copy `easy_ical` directory into `/system/user/addons/`
@@ -28,7 +27,6 @@ Along with `{exp:easy_ical:event}`, builds the <a href="https://en.wikipedia.org
 ##### `timezone` *(optional)*
 
 Specify the timezone for all events
-
 - **Type:** string
 - **Default:** `America/New_York`
 - **Options:** <a href="https://www.php.net/manual/en/timezones.php" target="_blank" title="Learn more about PHP timezones">PHP timezones</a>
@@ -36,14 +34,12 @@ Specify the timezone for all events
 ##### `calendar_name` *(optional)*
 
 Give your calendar a name
-
 - **Type:** string
 - **Default:** `Save the Date!`
 
 ##### `content_type` *(optional)*
 
 Force the specified content type (for debugging)
-
 - **Type:** string
 - **Default:** `text/calendar; charset=UTF-8`
 - **Options:** `text/plain`
@@ -51,7 +47,6 @@ Force the specified content type (for debugging)
 ##### `filename` *(optional)*
 
 Name for the generated iCalendar file
-
 - **Type:** string
 - **Default:** `save-the-date`
 
@@ -64,49 +59,42 @@ Along with `{exp:easy_ical:calendar}`, builds the <a href="https://en.wikipedia.
 ##### `uid` *(optional)*
 
 A unique identifier for the event, typically `{entry_id}`
-
 - **Type:** string
 - **Default:** unix timestamp
 
 ##### `start_time` *(optional)*
 
 The event start date and time, typically `{entry_date}`
-
 - **Type:** int
 - **Default:** Current date and time (unix timestamp)
 
 ##### `end_time` *(optional)*
 
 The event end date and time, typically `{expiration_date}` or custom channel field (date)
-
 - **Type:** int
 - **Default:** Current date and time + 24 hours (unix timestamp)
 
 ##### `location` *(optional)*
 
 The event location, typically a custom channel field (text).
-
 - **Type:** string
 - **Default:** `New York, NY`
 
 ##### `summary` *(optional)*
 
 The event summary, typically `{title}` or a custom channel field (text)
-
 - **Type:** string
 - **Default:** `An event happening in New York, NY`
 
 ##### `url` *(optional)*
 
 Allows you to add a link to the event.
-
 - **Type:** string
 - **Default:** `{site_url}{url_title}` via current install
 
 ##### `sequence` *(optional)*
 
 Needed if you update an entry with the same `uid`, otherwise iCal will not update the event.
-
 - **Type:** int
 - **Default:** unix timestamp
 
@@ -124,30 +112,24 @@ Needed if you update an entry with the same `uid`, otherwise iCal will not updat
 ## Changelog
 
 ### 2.0.0 *(2020-03-11)*
-
 - ExpressionEngine 3+ compatibility
 - Refactored methods
-- Overhauled documentdation
+- Overhauled documentation
 
 ### 1.3.0 *(2013-07-08)*
-
 - Updated `name` attr to `calendar_name`
 - Fixed a few conditionals
 
 ### 1.2.0 *(2013-07-08)*
-
 - ExpressionEngine 2.6 compatibility
 
 ### 1.1.1 *(2011-06-09)*
-
 - Adjusted the output slightly to fix compatibility issues with some versions of iCal
 
 ### 1.1.0 *(2011-05-05)*
-
 - Added url="" and sequence="" parameters (thanks to [GDmac](http://github.com/GDmac))
 
 ### 1.0.0 *(2010-11-24)*
-
 - Initial release
 
 ## License
