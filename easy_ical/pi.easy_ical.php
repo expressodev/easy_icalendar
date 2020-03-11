@@ -41,88 +41,72 @@ class Easy_ical
     }
 
     /**
-     * CALENDAR CREATION
+     * CALENDAR OBJECT
      *
      * @access  public
      * @return  string
     */
     public function calendar()
     {
-        $this->return_data = "BEGIN:VCALENDAR\r\nVERSION:2.0\r\n";
-        $this->return_data .= "PRODID:-//ExpressionEngine Easy iCalendar plugin//NONSGML v". EASY_ICAL_VERSION ."//EN\r\n";
+        // parameters
+        $timezone      = $this->escape(ee()->TMPL->fetch_param('timezone', 'America/New_York'));
+        $calendar_name = $this->escape(ee()->TMPL->fetch_param('calendar_name', 'Save the Date!'));
+        $content_type  = ee()->TMPL->fetch_param('content_type', 'text/calendar; charset=UTF-8');
+        $filename      = $this->escape(ee()->TMPL->fetch_param('filename', 'save-the-date'));
 
-        if (ee()->TMPL->fetch_param('timezone') !== FALSE) {
-            $this->return_data .= "X-WR-TIMEZONE:".$this->escape(ee()->TMPL->fetch_param('timezone'))."\r\n";
-        }
+        // capture event tag adn trim away whitespace
+        $tagdata       = trim(ee()->TMPL->tagdata);
+        $tagdata       = preg_replace('/END\:VEVENT\s*BEGIN\:VEVENT/', "END:VEVENT\r\nBEGIN:VEVENT", $tagdata);
 
-        if (ee()->TMPL->fetch_param('calendar_name') !== FALSE) {
-            $this->return_data .= "X-WR-CALNAME:".$this->escape(ee()->TMPL->fetch_param('calendar_name'))."\r\n";
-        }
+        // build the calendar object
+        $this->return_data = "BEGIN:VCALENDAR\r\nVERSION:2.0\r\n" .
+                             "PRODID:-//ExpressionEngine " . EASY_ICAL_NAME . " plugin//NONSGML v" . EASY_ICAL_VERSION . "//EN\r\n" .
+                             "X-WR-TIMEZONE:" . $timezone . "\r\n" .
+                             "X-WR-CALNAME:" . $calendar_name . "\r\n" .
+                             ( (!empty($tagdata)) ? $tagdata . "\r\n" : '' ) .
+                             "END:VCALENDAR";
 
-        // trim away whitespace between each entry
-        $tagdata = trim(ee()->TMPL->tagdata);
-        $tagdata = preg_replace('/END\:VEVENT\s*BEGIN\:VEVENT/', "END:VEVENT\r\nBEGIN:VEVENT", $tagdata);
-        if (!empty($tagdata)) $this->return_data .= $tagdata."\r\n";
-
-        $this->return_data .= "END:VCALENDAR";
-
-        // print output directly with the correct content-type
-        $content_type   = ee()->TMPL->fetch_param('content_type');
-        $filename       = $this->escape(ee()->TMPL->fetch_param('filename'));
-        if (empty($content_type)) $content_type = 'text/calendar; charset=UTF-8';
-        if (empty($filename)) $filename         = 'save-the-date';
-
+        // output headers
         header('Content-Description: File Transfer');
         header('Content-Type: ' . $content_type);
         header('Content-Disposition: attachment; filename="' . $filename . '.ics"');
         header('Expires: 0');
         header('Cache-Control: must-revalidate');
         header('Pragma: public');
-        // header('Content-Length: ' . filesize($file));
+
+        // output header
         exit($this->return_data);
     }
 
     /**
-     * CALENDAR EVENT CREATION
+     * EVENT OBJECT
      *
      * @access  public
      * @return  string
     */
     public function event()
     {
-        $this->return_data = "BEGIN:VEVENT\r\n".
-            "UID:".$this->escape(ee()->TMPL->fetch_param('uid'))."\r\n";
+        // parameters
+        $uid         = $this->escape(ee()->TMPL->fetch_param('uid', ee()->localize->now));
+        $start_time  = $this->ical_time(ee()->TMPL->fetch_param('start_time', $uid));
+        $end_time    = $this->ical_time(ee()->TMPL->fetch_param('end_time', $start_time+(60*60*24)));
+        $summary     = $this->escape(ee()->TMPL->fetch_param('summary', 'An event happening in New York, NY'));
+        $location    = $this->escape(ee()->TMPL->fetch_param('location'), 'New York, NY');
+        $sequence    = $this->escape(ee()->TMPL->fetch_param('sequence', 1));
+        $url         = $this->escape(ee()->TMPL->fetch_param('url', ''));
+        $description = $this->escape(trim(ee()->TMPL->tagdata));
 
-        if (ee()->TMPL->fetch_param('location') !== FALSE) {
-            $this->return_data .= "LOCATION:".$this->escape(ee()->TMPL->fetch_param('location'))."\r\n";
-        }
-
-        $this->return_data .= "DTSTAMP:".$this->ical_time(ee()->TMPL->fetch_param('start_time'))."\r\n";
-        $this->return_data .= "DTSTART:".$this->ical_time(ee()->TMPL->fetch_param('start_time'))."\r\n";
-
-        if (ee()->TMPL->fetch_param('end_time') != FALSE) {
-            $this->return_data .= "DTEND:".$this->ical_time(ee()->TMPL->fetch_param('end_time'))."\r\n";
-        } else {
-            $this->return_data .= "DTEND:".$this->ical_time(strtotime(ee()->TMPL->fetch_param('start_time')) + 3600)."\r\n";
-        }
-
-        if (ee()->TMPL->fetch_param('summary') !== FALSE) {
-            $this->return_data .= "SUMMARY:".$this->escape(ee()->TMPL->fetch_param('summary'))."\r\n";
-        }
-
-        if (ee()->TMPL->fetch_param('sequence') !== FALSE) {
-            $this->return_data .= "SEQUENCE:".$this->escape(ee()->TMPL->fetch_param('sequence'))."\r\n";
-        }
-        if (ee()->TMPL->fetch_param('url') !== FALSE) {
-            $this->return_data .= "URL:".$this->escape(ee()->TMPL->fetch_param('url'))."\r\n";
-        }
-
-        $description = trim(ee()->TMPL->tagdata);
-        if (!empty($description)) {
-            $this->return_data .= "DESCRIPTION:".$this->escape($description)."\r\n";
-        }
-
-        $this->return_data .= "END:VEVENT"."\r\n";
+        $this->return_data = "BEGIN:VEVENT\r\n" . 
+                             "UID:" . $uid . "\r\n" . 
+                             "DTSTAMP:" . $start_time . "\r\n" . 
+                             "DTSTART:" . $start_time . "\r\n" . 
+                             "DTEND:" . $end_time . "\r\n" . 
+                             "SUMMARY:" . $summary . "\r\n" . 
+                             "LOCATION:" . $location . "\r\n" . 
+                             ( (!empty($description)) ? "DESCRIPTION:" . $description . "\r\n" : '' ) . 
+                             ( (!empty($url)) ? "URL:" . $url . "\r\n" : '' ) . 
+                             "SEQUENCE:" . $sequence . "\r\n" . 
+                             "END:VEVENT"."\r\n";
 
         return $this->return_data;
     }
@@ -135,7 +119,7 @@ class Easy_ical
     */
     public function escape($str)
     {
-        // strip any html tags
+        // replace, then strip html tags
         $str = preg_replace('/\<p\>/i', "\n\n", $str);
         $str = preg_replace('/\<br\s*\/?\>/i', "\n", $str);
         $str = strip_tags($str);
