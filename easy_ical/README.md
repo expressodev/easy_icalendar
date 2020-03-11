@@ -27,30 +27,30 @@ Along with `{exp:easy_ical:event}`, builds the <a href="https://en.wikipedia.org
 
 Specify the timezone for all events
 
-– **Type:** string
+- **Type:** string
 - **Default:** `America/New_York`
-– **Options:** [PHP timezones](https://www.php.net/manual/en/timezones.php)
+- **Options:** [PHP timezones](https://www.php.net/manual/en/timezones.php)
 
 ##### `calendar_name` (*optional*)
 
 Give your calendar a name
 
-– **Type:** string
+- **Type:** string
 - **Default:** `Save the Date!`
 
 ##### `content_type` (*optional*)
 
 Force the specified content type (for debugging)
 
-– **Type:** string
+- **Type:** string
 - **Default:** `text/calendar; charset=UTF-8`
-– **Options:** `text/plain`
+- **Options:** `text/plain`
 
 ##### `filename` (*optional*)
 
 Name for the generated iCalendar file
 
-– **Type:** string
+- **Type:** string
 - **Default:** `save-the-date`
 
 ### `{exp:easy_ical:event}`
@@ -63,49 +63,49 @@ Along with `{exp:easy_ical:calendar}`, builds the <a href="https://en.wikipedia.
 
 A unique identifier for the event, typically `{entry_id}`
 
-– **Type:** string
+- **Type:** string
 - **Default:** unix timestamp
 
 ##### `start_time` (*optional*)
 
 The event start date and time, typically `{entry_date}`
 
-– **Type:** int
+- **Type:** int
 - **Default:** Current date and time (unix timestamp)
 
 ##### `end_time` (*optional*)
 
 The event end date and time, typically `{expiration_date}` or custom channel field (date)
 
-– **Type:** int
+- **Type:** int
 - **Default:** Current date and time + 24 hours (unix timestamp)
 
 ##### `location` (*optional*)
 
 The event location, typically a custom channel field (text).
 
-– **Type:** string
+- **Type:** string
 - **Default:** `New York, NY`
 
 ##### `summary` (*optional*)
 
 The event summary, typically `{title}` or a custom channel field (text)
 
-– **Type:** string
+- **Type:** string
 - **Default:** `An event happening in New York, NY`
 
 ##### `url` (*optional*)
 
 Allows you to add a link to the event.
 
-– **Type:** string
+- **Type:** string
 - **Default:** `{site_url}{url_title}` via current install
 
 ##### `sequence` (*optional*)
 
 Needed if you update an entry with the same `uid`, otherwise iCal will not update the event.
 
-– **Type:** int
+- **Type:** int
 - **Default:** unix timestamp
 
 #### Example Usage
