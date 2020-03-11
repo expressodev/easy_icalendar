@@ -25,7 +25,7 @@ Along with `{exp:easy_ical:event}`, builds the <a href="https://en.wikipedia.org
 
 #### Parameters
 
-##### `timezone` (*optional*)
+##### `timezone` *(optional)*
 
 Specify the timezone for all events
 
@@ -33,14 +33,14 @@ Specify the timezone for all events
 - **Default:** `America/New_York`
 - **Options:** <a href="https://www.php.net/manual/en/timezones.php" target="_blank" title="Learn more about PHP timezones">PHP timezones</a>
 
-##### `calendar_name` (*optional*)
+##### `calendar_name` *(optional)*
 
 Give your calendar a name
 
 - **Type:** string
 - **Default:** `Save the Date!`
 
-##### `content_type` (*optional*)
+##### `content_type` *(optional)*
 
 Force the specified content type (for debugging)
 
@@ -48,7 +48,7 @@ Force the specified content type (for debugging)
 - **Default:** `text/calendar; charset=UTF-8`
 - **Options:** `text/plain`
 
-##### `filename` (*optional*)
+##### `filename` *(optional)*
 
 Name for the generated iCalendar file
 
@@ -61,49 +61,49 @@ Along with `{exp:easy_ical:calendar}`, builds the <a href="https://en.wikipedia.
 
 #### Parameters
 
-##### `uid` (*optional*)
+##### `uid` *(optional)*
 
 A unique identifier for the event, typically `{entry_id}`
 
 - **Type:** string
 - **Default:** unix timestamp
 
-##### `start_time` (*optional*)
+##### `start_time` *(optional)*
 
 The event start date and time, typically `{entry_date}`
 
 - **Type:** int
 - **Default:** Current date and time (unix timestamp)
 
-##### `end_time` (*optional*)
+##### `end_time` *(optional)*
 
 The event end date and time, typically `{expiration_date}` or custom channel field (date)
 
 - **Type:** int
 - **Default:** Current date and time + 24 hours (unix timestamp)
 
-##### `location` (*optional*)
+##### `location` *(optional)*
 
 The event location, typically a custom channel field (text).
 
 - **Type:** string
 - **Default:** `New York, NY`
 
-##### `summary` (*optional*)
+##### `summary` *(optional)*
 
 The event summary, typically `{title}` or a custom channel field (text)
 
 - **Type:** string
 - **Default:** `An event happening in New York, NY`
 
-##### `url` (*optional*)
+##### `url` *(optional)*
 
 Allows you to add a link to the event.
 
 - **Type:** string
 - **Default:** `{site_url}{url_title}` via current install
 
-##### `sequence` (*optional*)
+##### `sequence` *(optional)*
 
 Needed if you update an entry with the same `uid`, otherwise iCal will not update the event.
 
