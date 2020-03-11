@@ -1,1 +1,1 @@
-system/expressionengine/third_party/easy_ical/README.md
+easy_ical/README.md
