@@ -40,7 +40,7 @@ $plugin_info = array(
 
 class Easy_ical
 {
-    const VERSION = '1.2';
+    const VERSION = '1.3';
 
     public function calendar()
     {
@@ -51,8 +51,8 @@ class Easy_ical
             $out .= "X-WR-TIMEZONE:".$this->escape(ee()->TMPL->fetch_param('timezone'))."\r\n";
         }
 
-        if (ee()->TMPL->fetch_param('calname') !== FALSE) {
-            $out .= "X-WR-CALNAME:".$this->escape(ee()->TMPL->fetch_param('calname'))."\r\n";
+        if (ee()->TMPL->fetch_param('calendar_name') !== FALSE) {
+            $out .= "X-WR-CALNAME:".$this->escape(ee()->TMPL->fetch_param('calendar_name'))."\r\n";
         }
 
         // EE has probably put heaps of useless whitespace between each entry
@@ -63,10 +63,18 @@ class Easy_ical
         $out .= "END:VCALENDAR";
 
         // print output directly with the correct content-type
-        $content_type = ee()->TMPL->fetch_param('content_type');
+        $content_type   = ee()->TMPL->fetch_param('content_type');
+        $filename       = $this->escape(ee()->TMPL->fetch_param('filename'));
         if (empty($content_type)) $content_type = 'text/calendar; charset=UTF-8';
+        if (empty($filename)) $filename         = 'save-the-date';
 
-        header('Content-Type: '.$content_type);
+        header('Content-Description: File Transfer');
+        header('Content-Type: ' . $content_type);
+        header('Content-Disposition: attachment; filename="' . $filename . '.ics"');
+        header('Expires: 0');
+        header('Cache-Control: must-revalidate');
+        header('Pragma: public');
+        // header('Content-Length: ' . filesize($file));
         exit($out);
     }
 
@@ -82,8 +90,10 @@ class Easy_ical
         $out .= "DTSTAMP:".$this->ical_time(ee()->TMPL->fetch_param('start_time'))."\r\n";
         $out .= "DTSTART:".$this->ical_time(ee()->TMPL->fetch_param('start_time'))."\r\n";
 
-        if (ee()->TMPL->fetch_param('end_time') !== FALSE) {
+        if (ee()->TMPL->fetch_param('end_time') != FALSE) {
             $out .= "DTEND:".$this->ical_time(ee()->TMPL->fetch_param('end_time'))."\r\n";
+        } else {
+            $out .= "DTEND:".$this->ical_time(strtotime(ee()->TMPL->fetch_param('start_time')) + 3600)."\r\n";
         }
 
         if (ee()->TMPL->fetch_param('summary') !== FALSE) {
