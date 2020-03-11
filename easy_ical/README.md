@@ -1,98 +1,120 @@
-Easy iCalendar ExpressionEngine Plugin
-======================================
+# Easy iCalendar
 
-Create valid iCalendars in seconds.
+ExpressionEngine plugin that builds valid iCalendar files.
+*Forked from https://github.com/expressodev/easy_icalendar/*
 
-Requirements
-------------
+## Requirements
 
-* ExpressionEngine 2.1.3+
+ExpressionEngine v2+
+*Compatible with EE v2-5*
 
-Installation
-------------
+## Installation
 
-To install Easy iCalendar, simply copy the entire `easy_ical` folder to
-`/system/expressionengine/third_party` on your server.
+- **EE v2:** Copy `easy_ical` directory into `/system/expressionengine/third_party/`
+- **EE v3:** Copy `easy_ical` directory into `/system/user/addons/`
+- **EE v4:** Copy `easy_ical` directory into `/system/user/addons/`
+- **EE v5:** Copy `easy_ical` directory into `/system/user/addons/`
 
-Complete Example
-----------------
+## Usage
 
-    {exp:easy_ical:calendar timezone="Pacific/Auckland" name="My Simple Event Calendar"}
-        {exp:channel:entries channel="events" show_future_entries="yes" show_expired="yes" limit="20"}
-            {exp:easy_ical:event uid="{entry_id}" start_time="{entry_date}" end_time="{expiration_date}" location="{event_location}" summary="{title}"}
-                {event_description}
-            {/exp:easy_ical:event}
-        {/exp:channel:entries}
-    {/exp:easy_ical:calendar}
-    
-All of the CRLF line endings and character escaping will be handled for you automatically.
+### `{exp:easy_ical:calendar}`
 
-**NOTE: Any code in your template outside of the {exp:easy_ical:calendar} tag will be ignored!**
+Along with `{exp:easy_ical:event}`, builds the <a href="https://en.wikipedia.org/wiki/ICalendar#Core_object" target="_blank" title="Read more about the iCalendar Core Object">iCalendar Core Object</a>
 
-Calendar Tag Parameters
------------------------
+#### Parameters
 
-### timezone="Pacific/Auckland"
+##### `timezone` (*optional*)
 
-Specify the timezone for all dates
+Specify the timezone for all events
 
-### name="My Calendar"
+– **Type:** string
+- **Default:** `America/New_York`
+– **Options:** [PHP timezones](https://www.php.net/manual/en/timezones.php)
+
+##### `calendar_name` (*optional*)
 
 Give your calendar a name
 
-### content_type="text/plain"
+– **Type:** string
+- **Default:** `Save the Date!`
 
-Force the specified content type (for debugging). Defaults to `text/calendar; charset=UTF-8`
+##### `content_type` (*optional*)
 
-Event Tag Parameters
---------------------
+Force the specified content type (for debugging)
 
-Any text inside the event tag will be used as the event description.
+– **Type:** string
+- **Default:** `text/calendar; charset=UTF-8`
+– **Options:** `text/plain`
 
-### uid="{entry_id}"
+##### `filename` (*optional*)
 
-A unique identifier for the event
+Name for the generated iCalendar file
 
-### start_time="{entry_date}"
+– **Type:** string
+- **Default:** `save-the-date`
 
-The event start time/date
+### `{exp:easy_ical:event}`
 
-### end_time="{expiration_date}"
+Along with `{exp:easy_ical:calendar}`, builds the <a href="https://en.wikipedia.org/wiki/ICalendar#Core_object" target="_blank" title="Read more about the iCalendar Core Object">iCalendar Core Object</a>
 
-The event end time/date
+#### Parameters
 
-### location="{event_location}"
+##### `uid` (*optional*)
 
-The event location (text). You probably want to pull this from a custom channel field.
+A unique identifier for the event, typically `{entry_id}`
 
-### summary="{title}"
+– **Type:** string
+- **Default:** unix timestamp
 
-The event summary (title). You probably want to pull this from a custom channel field.
+##### `start_time` (*optional*)
 
-### url="{url_title_path='group/template'}"
+The event start date and time, typically `{entry_date}`
+
+– **Type:** int
+- **Default:** Current date and time (unix timestamp)
+
+##### `end_time` (*optional*)
+
+The event end date and time, typically `{expiration_date}` or custom channel field (date)
+
+– **Type:** int
+- **Default:** Current date and time + 24 hours (unix timestamp)
+
+##### `location` (*optional*)
+
+The event location, typically a custom channel field (text).
+
+– **Type:** string
+- **Default:** `New York, NY`
+
+##### `summary` (*optional*)
+
+The event summary, typically `{title}` or a custom channel field (text)
+
+– **Type:** string
+- **Default:** `An event happening in New York, NY`
+
+##### `url` (*optional*)
 
 Allows you to add a link to the event.
 
-### sequence="{event_sequence}"
+– **Type:** string
+- **Default:** `{site_url}{url_title}` via current install
 
-This adds a simple sequence number to the event. This is needed if you update an entry, otherwise
-iCal won't update the event. Use a simple counter custom field, like [Reevision](http://github.com/GDmac/Reevision.ee_addon)
+##### `sequence` (*optional*)
 
-Changelog
----------
+Needed if you update an entry with the same `uid`, otherwise iCal will not update the event.
 
-**1.2** *(2013-07-08)*
+– **Type:** int
+- **Default:** unix timestamp
 
-* ExpressionEngine 2.6 compatibility
-
-**1.1.1** *(2011-06-09)*
-
-* Adjusted the output slightly to fix compatibility issues with some versions of iCal
-
-**1.1** *(2011-05-05)*
-
-* Added url="" and sequence="" parameters (thanks to [GDmac](http://github.com/GDmac))
-
-**1.0** *(2010-11-24)*
-
-* Initial release
+#### Example Usage
+```
+{exp:easy_ical:calendar timezone="Pacific/Auckland" name="My Event Calendar"}
+    {exp:channel:entries channel="events" show_future_entries="yes" show_expired="yes" limit="20"}
+        {exp:easy_ical:event uid="{entry_id}" start_time="{entry_date}" end_time="{expiration_date}" location="{event_location}" summary="{title}"}
+            {event_description}
+        {/exp:easy_ical:event}
+    {/exp:channel:entries}
+{/exp:easy_ical:calendar}
+```
