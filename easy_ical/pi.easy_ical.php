@@ -74,7 +74,7 @@ class Easy_ical
         header('Cache-Control: must-revalidate');
         header('Pragma: public');
 
-        // output header
+        // output file content
         exit($this->return_data);
     }
 
@@ -108,6 +108,7 @@ class Easy_ical
                              "SEQUENCE:" . $sequence . "\r\n" . 
                              "END:VEVENT"."\r\n";
 
+        // return event object
         return $this->return_data;
     }
 
