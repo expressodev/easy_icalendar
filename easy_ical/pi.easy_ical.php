@@ -88,7 +88,7 @@ class Easy_ical
     {
         // parameters
         $uid         = $this->escape(ee()->TMPL->fetch_param('uid', ee()->localize->now));
-        $start_time  = $this->ical_time(ee()->TMPL->fetch_param('start_time', $uid));
+        $start_time  = $this->ical_time(ee()->TMPL->fetch_param('start_time', ee()->localize->now));
         $end_time    = $this->ical_time(ee()->TMPL->fetch_param('end_time', $start_time+(60*60*24)));
         $summary     = $this->escape(ee()->TMPL->fetch_param('summary', 'An event happening in New York, NY'));
         $location    = $this->escape(ee()->TMPL->fetch_param('location'), 'New York, NY');
