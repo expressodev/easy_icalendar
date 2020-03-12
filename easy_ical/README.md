@@ -109,7 +109,7 @@ Needed if you update an entry with the same `uid`, otherwise iCal will not updat
 - **Type:** int
 - **Default:** unix timestamp
 
-#### Example Usage
+### Example
 ```
 {exp:easy_ical:calendar timezone="Pacific/Auckland" name="My Event Calendar"}
     {exp:channel:entries channel="events" show_future_entries="yes" show_expired="yes" limit="20"}
