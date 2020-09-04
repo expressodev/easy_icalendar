@@ -19,7 +19,7 @@ if ( ! defined('EASY_ICAL_NAME'))
     define('EASY_ICAL_DOCS',              'https://github.com/javashakes/easy_icalendar');
     define('EASY_ICAL_DESC',              '<p><strong>ExpressionEngine Plugin that creates valid iCalendar ICS files.</strong></p>Documentation and Usage: <a href="' . EASY_ICAL_DOCS . '" target="_blank">' . EASY_ICAL_DOCS . '</a>');
     define('EASY_ICAL_PACKAGE',           'easy_ical');
-    define('EASY_ICAL_NAMESPACE',         'EasyiCal');
+    define('EASY_ICAL_NAMESPACE',         'javashakes\EasyiCal');
     define('EASY_ICAL_CLASS_NAME',        'Easy_ical');
 }
 
